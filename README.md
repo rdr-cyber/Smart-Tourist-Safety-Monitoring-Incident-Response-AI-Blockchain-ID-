@@ -1,8 +1,164 @@
 # Smart Tourist Safety Monitoring & Incident Response System
 
-This project implements a comprehensive safety monitoring and incident response system for tourists using AI and Blockchain technology, specifically designed for India's tourism sector.
+## Project Overview
 
-## Project Structure
+This repository contains a comprehensive safety monitoring and incident response system for tourists, leveraging AI and Blockchain technologies to enhance travel safety.
+
+## Live Application
+
+✅ **Application URL**: https://smart-tourist-safety-monitoring-ej66gepmu-shelfwises-projects.vercel.app
+
+## System Architecture
+
+### Mobile App (Tourist-Facing)
+- **Platform**: React Native
+- **Features**:
+  - Home Dashboard with interactive map and SOS button
+  - Digital Identity Wallet with DID/VC storage
+  - AI-powered Incident Reporting
+  - Real-time Notifications
+  - Privacy-focused Settings
+
+### Web App (Admin & Agency Dashboard)
+- **Platform**: React with Material-UI
+- **Features**:
+  - Role-based Secure Login
+  - Real-time Incident Management
+  - Tourist Verification System
+  - Dispatch & Response Tracking
+  - Analytics & Reporting
+
+### Backend Services
+- **Server**: Node.js with Express
+- **Database**: MongoDB (conceptual)
+- **Blockchain**: DID registry for identity management
+- **AI Models**: TensorFlow.js for on-device processing
+
+## Key Features
+
+### Mobile Application
+1. **Home Dashboard**
+   - Interactive map with live geo-fence highlighting safe zones and restricted areas
+   - AI-driven status bar ("Safe / Caution / Alert")
+   - Quick access SOS button (floating red button, one-tap trigger)
+
+2. **Digital Identity & Wallet**
+   - Tourist's Verifiable Credential (VC) stored in DID wallet
+   - QR code generation for offline proof presentation
+   - Credential status display ("Verified by Tourism Dept / Active / Revoked")
+
+3. **Incident Reporting**
+   - AI auto-detection of distress (fall detection, abnormal movements)
+   - Manual incident reporting with category selection
+   - Media upload capability (photos, short video/audio clips)
+   - Auto timestamp and location metadata
+
+4. **Notifications Panel**
+   - Real-time alerts for emergency responses
+   - Incident status updates with case IDs
+   - Police dispatch notifications
+
+5. **Settings & Privacy**
+   - Consent preferences for PII sharing
+   - Language switching capability
+   - Offline mode for storing incidents locally
+
+### Web Application
+1. **Secure Login & Role Management**
+   - Role-based access control (Police, ERSS operator, Hospital desk, Tourism Dept admin)
+   - DID-based authentication with multi-factor authentication
+
+2. **Incident Management Console**
+   - Real-time list of active incidents with severity scores
+   - Filtering by location, time, and incident type
+   - Map visualization with incident clustering and heatmaps
+
+3. **Tourist Verification**
+   - Blockchain-backed verification of tourist DID/VC
+   - Credential status checking (valid/expired/revoked)
+   - Proof logs with blockchain transaction IDs
+
+4. **Dispatch & Response Tracker**
+   - One-click dispatch commands to nearest response units
+   - SLA timers to ensure timely action
+   - Response updates logged to blockchain for audit
+
+5. **Analytics & Reports**
+   - Daily/weekly safety analytics by region and demographics
+   - Predictive alerts for high-risk areas
+   - Exportable reports in CSV/JSON formats
+
+## Advanced Features
+
+### Itinerary Risk Scanner
+- AI-powered analysis of tourist itineraries
+- Risk scoring for planned activities and locations
+- Real-time alerts for high-risk segments
+- Alternative route suggestions
+
+### Integrated Digital Safe
+- Secure storage for digital valuables (documents, photos, passwords)
+- Blockchain-backed encryption
+- Emergency access for authorized contacts
+- Backup and sync across devices
+
+### Anonymous Incident Reporting
+- One-tap anonymous reporting for sensitive incidents
+- End-to-end encryption for reporter identity
+- Geofenced anonymous reporting zones
+- Real-time acknowledgment without identity reveal
+
+### AI-Based Safety Score for Locations
+- Machine learning models for location risk assessment
+- Real-time safety scoring based on multiple factors
+- Predictive analytics for emerging risks
+- Community-sourced safety data integration
+
+### Fake Guide/Taxi Detector
+- Image recognition for license verification
+- Database cross-checking with authorized providers
+- Real-time alerts for suspicious activities
+- Reporting mechanism for fraudulent operators
+
+### Travel Insurance & Safety Integration
+- Direct integration with insurance providers
+- Automated claims processing for verified incidents
+- Safety score discounts for responsible tourists
+- Emergency medical network access
+
+## Technical Implementation
+
+### UI Design
+- Professional Material-UI theme with safety-themed colors
+- Responsive design for all device sizes
+- India travel-related graphics and animations
+- Card-based layout with subtle shadows and rounded corners
+
+### Map Engine
+- OpenStreetMap or Mapbox with offline caching capabilities
+- India-specific map layers and points of interest
+- Real-time incident clustering and heatmaps
+- Location-based safety zone visualization
+
+### Blockchain Layer
+- DID registry for tourist identities
+- Hash-only incident proofs stored on blockchain
+- Smart contracts for automated verification
+- Transparent audit trail for all actions
+
+### AI Models
+- On-device models for fall detection and sentiment analysis
+- Cloud-based models for risk scoring and predictive analytics
+- Computer vision for fake guide/taxi detection
+- Natural language processing for incident categorization
+
+### Data Privacy
+- Incident logs stored with consent vault
+- Only cryptographic proofs stored on blockchain
+- PII sharing controlled by user consent preferences
+- End-to-end encryption for sensitive communications
+
+## Directory Structure
 
 ```
 ├── mobile-app/                 # Tourist-facing mobile application
@@ -36,207 +192,67 @@ This project implements a comprehensive safety monitoring and incident response 
     ├── server.js               # Backend Express server
     ├── package.json            # Project dependencies and scripts
     ├── .env                    # Environment variables
-    ├── README.md               # Web application documentation
-    ├── demo.html               # Standalone HTML demo
     └── build/                  # Production build (created after npm run build)
 ```
-
-## Mobile App Features
-
-### 1. Home Dashboard
-- Interactive map with live geo-fence highlighting safe zones and restricted areas
-- AI-driven risk score status bar ("Safe / Caution / Alert")
-- Quick access SOS button (floating red button, one-tap trigger)
-- Navigation to other app sections
-
-### 2. Digital Identity & Wallet
-- Tourist's Verifiable Credential (VC) stored in DID wallet
-- QR code generation for offline proof presentation
-- Credential status display ("Verified by Tourism Dept / Active / Revoked")
-
-### 3. Incident Reporting
-- AI auto-detection of distress (fall detection, abnormal movements)
-- Manual incident reporting with category selection
-- Media upload capability (photos, short video/audio clips)
-- Auto timestamp and location metadata
-
-### 4. Notifications Panel
-- Real-time alerts for emergency responses
-- Incident status updates with case IDs
-- Police dispatch notifications
-- Emergency Response System (ERSS) triggers
-
-### 5. Settings & Privacy
-- Consent preferences for PII sharing
-- Language switching capability
-- Offline mode for storing incidents locally
-- Local incident management
-
-## Web App Features
-
-### 1. Secure Login & Role Management
-- Role-based access control (Police, ERSS operator, Hospital desk, Tourism Dept admin)
-- DID-based authentication with multi-factor authentication
-
-### 2. Dashboard Overview
-- Real-time statistics and KPIs
-- Quick action buttons for key functions
-- Safety zone visualization for popular Indian tourist destinations
-- Recent incidents and tourist verification updates
-
-### 3. Incident Management Console
-- Real-time list of active incidents with severity scores
-- Filtering by location, time, and incident type
-- Map visualization with incident clustering and heatmaps
-
-### 4. Tourist Verification
-- Blockchain-backed verification of tourist DID/VC
-- Credential status checking (valid/expired/revoked)
-- Proof logs with blockchain transaction IDs
-
-### 5. Dispatch & Response Tracker
-- One-click dispatch commands to nearest response units
-- SLA timers to ensure timely action
-- Response updates logged to blockchain for audit
-
-### 6. Analytics & Reports
-- Daily/weekly safety analytics by region and demographics
-- Predictive alerts for high-risk areas
-- Exportable reports in CSV/JSON formats
-
-## Additional Features
-
-### 1. Itinerary Risk Scanner
-- AI-powered analysis of tourist itineraries
-- Risk scoring for planned activities and locations
-- Real-time alerts for high-risk segments
-- Alternative route suggestions
-
-### 2. Integrated Digital Safe
-- Secure storage for digital valuables (documents, photos, passwords)
-- Blockchain-backed encryption
-- Emergency access for authorized contacts
-- Backup and sync across devices
-
-### 3. Anonymous Incident Reporting
-- One-tap anonymous reporting for sensitive incidents
-- End-to-end encryption for reporter identity
-- Geofenced anonymous reporting zones
-- Real-time acknowledgment without identity reveal
-
-### 4. AI-Based Safety Score for Locations
-- Machine learning models for location risk assessment
-- Real-time safety scoring based on multiple factors
-- Predictive analytics for emerging risks
-- Community-sourced safety data integration
-
-### 5. Fake Guide/Taxi Detector
-- Image recognition for license verification
-- Database cross-checking with authorized providers
-- Real-time alerts for suspicious activities
-- Reporting mechanism for fraudulent operators
-
-### 6. Travel Insurance & Safety Integration
-- Direct integration with insurance providers
-- Automated claims processing for verified incidents
-- Safety score discounts for responsible tourists
-- Emergency medical network access
-
-## Technical Implementation Notes
-
-### UI Design
-- Professional Material-UI theme with safety-themed colors
-- Responsive design for all device sizes
-- India travel-related graphics and animations
-- Card-based layout with subtle shadows and rounded corners
-- Consistent styling across all views
-
-### Map Engine
-- OpenStreetMap or Mapbox with offline caching capabilities
-- India-specific map layers and points of interest
-- Real-time incident clustering and heatmaps
-- Location-based safety zone visualization
-
-### Blockchain Layer
-- DID registry for tourist identities
-- Hash-only incident proofs stored on blockchain
-- Smart contracts for automated verification
-- Transparent audit trail for all actions
-
-### AI Models
-- On-device models for fall detection and sentiment analysis
-- Cloud-based models for risk scoring and predictive analytics
-- Computer vision for fake guide/taxi detection
-- Natural language processing for incident categorization
-
-### Data Privacy
-- Incident logs stored with consent vault
-- Only cryptographic proofs stored on blockchain
-- PII sharing controlled by user consent preferences
-- End-to-end encryption for sensitive communications
-
-## Backend Server
-
-### Technology Stack
-- Node.js with Express.js
-- RESTful API architecture
-- CORS-enabled for cross-origin requests
-- Environment variable configuration
-
-### API Endpoints
-- Incidents management (CRUD operations)
-- Tourist verification and credential management
-- Real-time data streaming for live updates
-- Analytics and reporting endpoints
 
 ## Getting Started
 
 ### Prerequisites
 - Node.js (version 16 or higher)
 - npm (comes with Node.js)
+- React Native CLI (for mobile development)
 
-### Mobile App
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/rdr-cyber/smart-tourist-safety-monitoring.git
+   cd smart-tourist-safety-monitoring
+   ```
+
+2. Install dependencies for web app:
+   ```bash
+   cd web-app
+   npm install
+   ```
+
+3. Install dependencies for mobile app:
+   ```bash
+   cd ../mobile-app
+   npm install
+   ```
+
+### Running the Applications
+
+#### Web App
+```bash
+cd web-app
+# Start both frontend and backend servers
+npm run dev
+
+# Or start them separately:
+# Terminal 1: Backend server
+node server.js
+
+# Terminal 2: Frontend development server
+npm start
+```
+
+Open your browser to `http://localhost:3000`
+
+#### Mobile App
 ```bash
 cd mobile-app
-npm install
 # For iOS
 npx react-native run-ios
+
 # For Android
 npx react-native run-android
 ```
 
-### Web App
-1. Navigate to the web-app directory:
-   ```bash
-   cd web-app
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start both frontend and backend servers:
-   ```bash
-   npm run dev
-   ```
-
-   Or start them separately:
-   ```bash
-   # Terminal 1: Start backend server
-   node server.js
-   
-   # Terminal 2: Start frontend development server
-   npm start
-   ```
-
-4. Open your browser to:
-   - Development: http://localhost:3000
-   - Production: http://localhost:5000 (after building)
-
 ### Production Build
-To create a production build of the web application:
 
+#### Web App
 ```bash
 cd web-app
 npm run build
@@ -288,11 +304,28 @@ This system is specifically designed for the Indian tourism sector with:
 
 ## Documentation
 
-- [Web Application README](web-app/README.md) - Detailed documentation for the web application
-- [Running Instructions](RUNNING_INSTRUCTIONS.md) - Step-by-step guide to run the complete system
-- [Enhancement Summary](FINAL_ENHANCEMENT_SUMMARY.md) - Summary of all improvements made
-- [Demo HTML](web-app/demo.html) - Standalone HTML demonstration of UI/UX design
+- [System Specifications](SYSTEM_SPECIFICATIONS.md) - Detailed feature specifications
+- [Deployment Summary](DEPLOYMENT_SUMMARY.md) - Deployment information
+- [Web Application README](web-app/README.md) - Web app documentation
+- [Preview](preview.html) - HTML preview of the application
 
-## Support
+## Deployment
 
-For support, please open an issue on the repository or contact the development team.
+The application is currently deployed at:
+https://smart-tourist-safety-monitoring-ej66gepmu-shelfwises-projects.vercel.app
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a pull request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+Project Link: [https://github.com/rdr-cyber/smart-tourist-safety-monitoring](https://github.com/rdr-cyber/smart-tourist-safety-monitoring)
