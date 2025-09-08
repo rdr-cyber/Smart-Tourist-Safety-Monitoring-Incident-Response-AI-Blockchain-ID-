@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tourist Safety Monitoring System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #4fc3f7;
+        }
+        
+        .feature-card p {
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .tech-stack {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        
+        .tech-stack h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #4fc3f7;
+        }
+        
+        .tech-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .tech-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+        
+        .cta {
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #2196f3, #21cbf3);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Smart Tourist Safety Monitoring & Incident Response System</h1>
+            <p class="subtitle">An AI and Blockchain-powered solution for enhancing tourist safety through real-time monitoring, incident reporting, and secure identity verification</p>
+        </header>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>Real-time Monitoring</h3>
+                <p>Continuous tracking of tourist locations with AI-powered risk assessment and predictive analytics for proactive safety measures.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Incident Response</h3>
+                <p>Instant reporting and coordination system that connects tourists with emergency services and nearby response units.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Blockchain Identity</h3>
+                <p>Secure digital identity verification using Decentralized Identifiers (DID) and Verifiable Credentials (VC) for trusted authentication.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Mobile & Web Interface</h3>
+                <p>User-friendly applications for both tourists and safety personnel with intuitive dashboards and real-time updates.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Advanced Features</h3>
+                <p>Itinerary risk scanner, digital safe, anonymous reporting, AI safety scores, and fraud detection for guides/taxis.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Analytics & Reports</h3>
+                <p>Comprehensive data insights with predictive alerts, safety trends, and performance metrics for continuous improvement.</p>
+            </div>
+        </div>
+        
+        <div class="tech-stack">
+            <h2>Technology Stack</h2>
+            <div class="tech-items">
+                <div class="tech-item">React Native</div>
+                <div class="tech-item">React.js</div>
+                <div class="tech-item">Material-UI</div>
+                <div class="tech-item">Node.js</div>
+                <div class="tech-item">Express.js</div>
+                <div class="tech-item">Blockchain</div>
+                <div class="tech-item">AI/ML</div>
+                <div class="tech-item">MongoDB</div>
+            </div>
+        </div>
+        
+        <div class="cta">
+            <h2>Ready to Enhance Tourist Safety?</h2>
+            <p>Experience the future of tourist safety monitoring</p>
+            <br>
+            <a href="https://github.com/rdr-cyber/smart-tourist-safety-monitoring" class="btn">View on GitHub</a>
+        </div>
+        
+        <footer>
+            <p>Smart Tourist Safety Monitoring System &copy; 2025</p>
+            <p>Powered by AI and Blockchain Technology</p>
+        </footer>
+    </div>
+</body>
+</html>
