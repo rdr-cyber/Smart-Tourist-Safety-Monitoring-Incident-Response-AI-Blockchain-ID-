@@ -1,0 +1,40 @@
+/* India-themed image placeholders */
+.taj-mahal-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+              linear-gradient(135deg, #8B0000 0%, #B22222 50%, #CD5C5C 100%);
+}
+
+.gateway-of-india-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+              linear-gradient(135deg, #000080 0%, #4169E1 50%, #87CEEB 100%);
+}
+
+.hawa-mahal-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+              linear-gradient(135deg, #FF8C00 0%, #FFA500 50%, #FFD700 100%);
+}
+
+.india-gate-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+              linear-gradient(135deg, #228B22 0%, #32CD32 50%, #90EE90 100%);
+}
+
+.kedarnath-temple-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+              linear-gradient(135deg, #2F4F4F 0%, #696969 50%, #A9A9A9 100%);
+}
+
+.jagannath-temple-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+              linear-gradient(135deg, #800080 0%, #9932CC 50%, #DA70D6 100%);
+}
+
+.qutub-minar-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+              linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #D2691E 100%);
+}
+
+.mysore-palace-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+              linear-gradient(135deg, #4B0082 0%, #8A2BE2 50%, #9370DB 100%);
+}
