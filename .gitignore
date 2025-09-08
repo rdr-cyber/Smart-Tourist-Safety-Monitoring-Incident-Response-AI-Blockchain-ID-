@@ -101,3 +101,4 @@ Thumbs.db
 # Package lock files
 package-lock.json
 yarn.lock
+.vercel
