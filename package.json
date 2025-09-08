@@ -1,7 +1,25 @@
 {
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.2",
-    "express": "^5.1.0"
-  }
+  "name": "smart-tourist-safety-monitoring",
+  "version": "1.0.0",
+  "description": "Smart Tourist Safety Monitoring & Incident Response System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "cd web-app && npm run build",
+    "dev": "cd web-app && npm run dev"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "keywords": [
+    "tourist",
+    "safety",
+    "monitoring",
+    "incident",
+    "response",
+    "ai",
+    "blockchain"
+  ],
+  "author": "rdr-cyber",
+  "license": "MIT"
 }
