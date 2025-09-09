@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tourist Safety - Enhanced India-Themed Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2E7D32;
+            --secondary: #0288D1;
+            --accent: #FF5722;
+            --light: #F5F5F5;
+            --dark: #212121;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --info: #2196F3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #f8bbd0 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .logo h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        
+        .live-indicator {
+            background: var(--success);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            animation: pulse 2s infinite;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-title p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .stat-icon.warning {
+            background: linear-gradient(135deg, var(--warning), #FFB300);
+        }
+        
+        .stat-icon.success {
+            background: linear-gradient(135deg, var(--success), #81C784);
+        }
+        
+        .stat-icon.info {
+            background: linear-gradient(135deg, var(--info), #64B5F6);
+        }
+        
+        .stat-icon.danger {
+            background: linear-gradient(135deg, var(--danger), #E57373);
+        }
+        
+        .stat-content h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .stat-content p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .change-indicator {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        
+        .change-positive {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+        
+        .change-negative {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--danger);
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .card-header button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .card-header button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .action-button {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .action-button:nth-child(1) .action-icon {
+            background: linear-gradient(135deg, var(--primary), #66BB6A);
+        }
+        
+        .action-button:nth-child(2) .action-icon {
+            background: linear-gradient(135deg, var(--secondary), #42A5F5);
+        }
+        
+        .action-button:nth-child(3) .action-icon {
+            background: linear-gradient(135deg, #9C27B0, #AB47BC);
+        }
+        
+        .action-button:nth-child(4) .action-icon {
+            background: linear-gradient(135deg, var(--accent), #FF7043);
+        }
+        
+        .action-button h4 {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .safety-map {
+            height: 200px;
+            background: linear-gradient(rgba(46, 125, 50, 0.8), rgba(2, 136, 209, 0.8)), url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .safety-map::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="30" r="3" fill="white" opacity="0.7"/><circle cx="50" cy="50" r="3" fill="white" opacity="0.7"/><circle cx="80" cy="70" r="3" fill="white" opacity="0.7"/></svg>');
+            animation: moveMap 20s linear infinite;
+        }
+        
+        .safety-zone {
+            margin-bottom: 1.2rem;
+        }
+        
+        .zone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .zone-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .zone-status {
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-safe {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+        
+        .status-moderate {
+            background: rgba(255, 152, 0, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-high-risk {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--danger);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+        
+        .fill-safe {
+            background: linear-gradient(90deg, var(--success), #81C784);
+            width: 95%;
+        }
+        
+        .fill-moderate {
+            background: linear-gradient(90deg, var(--warning), #FFB300);
+            width: 70%;
+        }
+        
+        .fill-high-risk {
+            background: linear-gradient(90deg, var(--danger), #E57373);
+            width: 30%;
+        }
+        
+        .incident-list, .tourist-list {
+            list-style: none;
+        }
+        
+        .incident-item, .tourist-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .incident-item:last-child, .tourist-item:last-child {
+            border-bottom: none;
+        }
+        
+        .incident-header, .tourist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .incident-location, .tourist-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .incident-status, .tourist-status {
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--danger);
+        }
+        
+        .status-in-progress {
+            background: rgba(255, 152, 0, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-resolved {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+        
+        .status-verified {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+        
+        .incident-details, .tourist-details {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .incident-assigned, .tourist-location {
+            color: #999;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes moveMap {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100px); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>Smart Tourist Safety Admin</h1>
+            </div>
+            <div class="live-indicator">
+                <i class="fas fa-circle"></i> Live Monitoring
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="dashboard-title">
+            <h2>Dashboard Overview</h2>
+            <p>Real-time monitoring and analytics for tourist safety across India</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card fade-in">
+                <div class="stat-header">
+                    <div class="stat-icon danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <h3>12</h3>
+                    <p>Active Incidents</p>
+                    <div class="change-indicator change-positive">
+                        <i class="fas fa-arrow-up"></i> +3 from last period
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card fade-in delay-1">
+                <div class="stat-header">
+                    <div class="stat-icon success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <h3>85%</h3>
+                    <p>Resolved Today</p>
+                    <div class="change-indicator change-positive">
+                        <i class="fas fa-arrow-up"></i> +5% from yesterday
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card fade-in delay-2">
+                <div class="stat-header">
+                    <div class="stat-icon info">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <h3>7.2 min</h3>
+                    <p>Avg Response Time</p>
+                    <div class="change-indicator change-negative">
+                        <i class="fas fa-arrow-down"></i> -0.3 from yesterday
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card fade-in delay-3">
+                <div class="stat-header">
+                    <div class="stat-icon warning">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <h3>142</h3>
+                    <p>Tourists Verified</p>
+                    <div class="change-indicator change-positive">
+                        <i class="fas fa-arrow-up"></i> +24 from last period
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-grid">
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h3>Quick Actions</h3>
+                    <button>View All</button>
+                </div>
+                <div class="card-body">
+                    <div class="quick-actions-grid">
+                        <div class="action-button">
+                            <div class="action-icon">
+                                <i class="fas fa-list-alt"></i>
+                            </div>
+                            <h4>Incident Management</h4>
+                        </div>
+                        <div class="action-button">
+                            <div class="action-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <h4>Tourist Verification</h4>
+                        </div>
+                        <div class="action-button">
+                            <div class="action-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <h4>Dispatch Tracker</h4>
+                        </div>
+                        <div class="action-button">
+                            <div class="action-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h4>Analytics & Reports</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card fade-in delay-1">
+                <div class="card-header">
+                    <h3>Safety Zones</h3>
+                    <button>View Map</button>
+                </div>
+                <div class="card-body">
+                    <div class="safety-map">
+                        <div>
+                            <i class="fas fa-map-marked-alt"></i>
+                            <div>India Tourist Safety Map</div>
+                        </div>
+                    </div>
+                    
+                    <div class="safety-zone">
+                        <div class="zone-header">
+                            <div class="zone-name">Taj Mahal, Agra</div>
+                            <div class="zone-status status-safe">Safe</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill fill-safe"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="safety-zone">
+                        <div class="zone-header">
+                            <div class="zone-name">Gateway of India, Mumbai</div>
+                            <div class="zone-status status-moderate">Moderate</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill fill-moderate"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="safety-zone">
+                        <div class="zone-header">
+                            <div class="zone-name">Hawa Mahal, Jaipur</div>
+                            <div class="zone-status status-high-risk">High Risk</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill fill-high-risk"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="safety-zone">
+                        <div class="zone-header">
+                            <div class="zone-name">India Gate, Delhi</div>
+                            <div class="zone-status status-safe">Safe</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill fill-safe"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h3>Recent Incidents</h3>
+                    <button>View All</button>
+                </div>
+                <div class="card-body">
+                    <ul class="incident-list">
+                        <li class="incident-item">
+                            <div class="incident-header">
+                                <div class="incident-location">
+                                    <i class="fas fa-exclamation-circle" style="color: var(--danger);"></i>
+                                    Taj Mahal, Agra
+                                </div>
+                                <div class="incident-status status-active">Active</div>
+                            </div>
+                            <div class="incident-details">
+                                <i class="fas fa-heartbeat"></i> Medical Emergency • 14:30:22
+                            </div>
+                            <div class="incident-assigned">
+                                <i class="fas fa-user-tag"></i> Assigned to POL-05-AGRA
+                            </div>
+                        </li>
+                        <li class="incident-item">
+                            <div class="incident-header">
+                                <div class="incident-location">
+                                    <i class="fas fa-exclamation-circle" style="color: var(--danger);"></i>
+                                    Gateway of India, Mumbai
+                                </div>
+                                <div class="incident-status status-in-progress">In Progress</div>
+                            </div>
+                            <div class="incident-details">
+                                <i class="fas fa-user-times"></i> Lost/Harassed • 14:25:10
+                            </div>
+                            <div class="incident-assigned">
+                                <i class="fas fa-user-tag"></i> Assigned to POL-12-MUMBAI
+                            </div>
+                        </li>
+                        <li class="incident-item">
+                            <div class="incident-header">
+                                <div class="incident-location">
+                                    <i class="fas fa-exclamation-circle" style="color: var(--danger);"></i>
+                                    Hawa Mahal, Jaipur
+                                </div>
+                                <div class="incident-status status-resolved">Resolved</div>
+                            </div>
+                            <div class="incident-details">
+                                <i class="fas fa-user-injured"></i> Accident • 14:15:45
+                            </div>
+                            <div class="incident-assigned">
+                                <i class="fas fa-user-tag"></i> Assigned to POL-08-JAIPUR
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card fade-in delay-1">
+                <div class="card-header">
+                    <h3>Tourist Verification</h3>
+                    <button>View All</button>
+                </div>
+                <div class="card-body">
+                    <ul class="tourist-list">
+                        <li class="tourist-item">
+                            <div class="tourist-header">
+                                <div class="tourist-name">
+                                    <i class="fas fa-user"></i> John Smith
+                                </div>
+                                <div class="tourist-status status-verified">Verified</div>
+                            </div>
+                            <div class="tourist-details">
+                                <i class="fas fa-flag"></i> American • Verified 2025-09-08 14:30:22
+                            </div>
+                            <div class="tourist-location">
+                                <i class="fas fa-map-marker-alt"></i> Taj Mahal, Agra
+                            </div>
+                        </li>
+                        <li class="tourist-item">
+                            <div class="tourist-header">
+                                <div class="tourist-name">
+                                    <i class="fas fa-user"></i> Maria Garcia
+                                </div>
+                                <div class="tourist-status status-active">Active</div>
+                            </div>
+                            <div class="tourist-details">
+                                <i class="fas fa-flag"></i> Spanish • Verified 2025-09-08 10:15:45
+                            </div>
+                            <div class="tourist-location">
+                                <i class="fas fa-map-marker-alt"></i> Gateway of India, Mumbai
+                            </div>
+                        </li>
+                        <li class="tourist-item">
+                            <div class="tourist-header">
+                                <div class="tourist-name">
+                                    <i class="fas fa-user"></i> Yamamoto Takeshi
+                                </div>
+                                <div class="tourist-status status-verified">Verified</div>
+                            </div>
+                            <div class="tourist-details">
+                                <i class="fas fa-flag"></i> Japanese • Verified 2025-09-08 09:45:12
+                            </div>
+                            <div class="tourist-location">
+                                <i class="fas fa-map-marker-alt"></i> Hawa Mahal, Jaipur
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.card, .stat-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Add click events to action buttons
+            const actionButtons = document.querySelectorAll('.action-button');
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.querySelector('h4').textContent;
+                    alert(`Navigating to ${action} section...`);
+                });
+            });
+            
+            // Add click events to view buttons
+            const viewButtons = document.querySelectorAll('.card-header button');
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const section = this.closest('.card').querySelector('h3').textContent;
+                    alert(`Viewing all ${section}...`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

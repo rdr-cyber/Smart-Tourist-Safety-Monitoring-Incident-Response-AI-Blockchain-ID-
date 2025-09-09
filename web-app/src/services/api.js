@@ -70,10 +70,73 @@ export const unitApi = {
   getAllUnits: () => apiRequest('/units'),
 };
 
+// Blockchain API
+export const blockchainApi = {
+  // Create a new tourist identity on blockchain
+  createIdentity: (touristData) => apiRequest('/blockchain/identity', {
+    method: 'POST',
+    body: JSON.stringify({ touristData }),
+  }),
+  
+  // Get tourist identity from blockchain
+  getIdentity: (touristId) => apiRequest(`/blockchain/identity/${touristId}`),
+  
+  // Verify tourist identity on blockchain
+  verifyIdentity: (touristId) => apiRequest(`/blockchain/verify/${touristId}`, {
+    method: 'POST',
+  }),
+  
+  // Revoke tourist identity on blockchain
+  revokeIdentity: (touristId) => apiRequest(`/blockchain/revoke/${touristId}`, {
+    method: 'POST',
+  }),
+};
+
+// AI Anomaly Detection API
+export const aiApi = {
+  // Detect location drop-off
+  detectLocationDropoff: (locationData) => apiRequest('/ai/detect/location-dropoff', {
+    method: 'POST',
+    body: JSON.stringify({ locationData }),
+  }),
+  
+  // Detect prolonged inactivity
+  detectInactivity: (locationData, thresholdMinutes) => apiRequest('/ai/detect/inactivity', {
+    method: 'POST',
+    body: JSON.stringify({ locationData, thresholdMinutes }),
+  }),
+  
+  // Detect route deviation
+  detectRouteDeviation: (currentPath, plannedItinerary) => apiRequest('/ai/detect/route-deviation', {
+    method: 'POST',
+    body: JSON.stringify({ currentPath, plannedItinerary }),
+  }),
+};
+
+// IoT API
+export const iotApi = {
+  // Register an IoT device
+  registerDevice: (deviceData) => apiRequest('/iot/devices', {
+    method: 'POST',
+    body: JSON.stringify(deviceData),
+  }),
+  
+  // Trigger SOS from device
+  triggerSOS: (deviceId) => apiRequest(`/iot/devices/${deviceId}/sos`, {
+    method: 'POST',
+  }),
+  
+  // Get device status
+  getDeviceStatus: (deviceId) => apiRequest(`/iot/devices/${deviceId}/status`),
+};
+
 // Export the base API functions
 export default {
   incidentApi,
   touristApi,
   locationApi,
   unitApi,
+  blockchainApi,
+  aiApi,
+  iotApi,
 };

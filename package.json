@@ -1,7 +1,31 @@
 {
+  "name": "smart-tourist-safety-monitoring",
+  "version": "1.0.0",
+  "description": "Smart Tourist Safety Monitoring & Incident Response System",
+  "main": "web-app/server.js",
+  "scripts": {
+    "start": "cd web-app && npm start",
+    "build": "cd web-app && npm run build",
+    "dev": "cd web-app && npm run dev",
+    "server": "cd web-app && npm run server",
+    "deploy": "cd web-app && vercel --prod --yes"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "keywords": [
+    "tourist",
+    "safety",
+    "monitoring",
+    "incident",
+    "response",
+    "ai",
+    "blockchain"
+  ],
+  "author": "rdr-cyber",
+  "license": "MIT",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.2",
-    "express": "^5.1.0"
+    "concurrently": "^9.2.1",
+    "react-scripts": "^5.0.1"
   }
 }
