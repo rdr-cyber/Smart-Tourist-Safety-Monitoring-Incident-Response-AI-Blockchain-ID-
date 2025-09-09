@@ -6,7 +6,7 @@ This repository contains a comprehensive safety monitoring and incident response
 
 ## Live Application
 
-✅ **Application URL**: https://smart-tourist-safety-monitoring-ej66gepmu-shelfwises-projects.vercel.app
+✅ **Application URL**: https://smart-tourist-safety-monitoring-5dceoxt6e-shelfwises-projects.vercel.app
 
 ## System Architecture
 
