@@ -4,113 +4,100 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Switch,
   TouchableOpacity,
+  Switch,
   Alert,
+  Picker,
 } from 'react-native';
+import localizationService from '../services/localization';
 
 const Settings = () => {
-  const [piiSharing, setPiiSharing] = useState(true);
-  const [anonymousLogging, setAnonymousLogging] = useState(false);
-  const [offlineMode, setOfflineMode] = useState(true);
-  const [selectedLanguage, setSelectedLanguage] = useState('English');
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [offlineMode, setOfflineMode] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState(localizationService.getCurrentLanguage());
 
-  const languages = ['English', 'Hindi', 'Malayalam'];
-
-  const saveSettings = () => {
-    // In a real app, this would save settings to persistent storage
-    Alert.alert('Settings Saved', 'Your preferences have been updated');
+  const toggleNotifications = () => {
+    setNotificationsEnabled(!notificationsEnabled);
   };
 
-  const clearLocalIncidents = () => {
-    Alert.alert(
-      'Clear Local Incidents',
-      'This will delete all locally stored incident reports. Are you sure?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Clear', style: 'destructive' },
-      ]
-    );
+  const toggleOfflineMode = () => {
+    setOfflineMode(!offlineMode);
   };
+
+  const changeLanguage = (language) => {
+    if (localizationService.setLanguage(language)) {
+      setSelectedLanguage(language);
+      Alert.alert(
+        localizationService.t('success'),
+        `${localizationService.t('language')} ${localizationService.t('updated')}`,
+        [{ text: localizationService.t('ok') }]
+      );
+    } else {
+      Alert.alert(
+        localizationService.t('error'),
+        localizationService.t('invalid_language'),
+        [{ text: localizationService.t('ok') }]
+      );
+    }
+  };
+
+  const languages = localizationService.getSupportedLanguages();
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Settings & Privacy</Text>
+        <Text style={styles.title}>{localizationService.t('settings_title')}</Text>
       </View>
       
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Privacy Preferences</Text>
-        <View style={styles.settingRow}>
-          <Text style={styles.settingLabel}>Share PII with authorities</Text>
-          <Switch
-            value={piiSharing}
-            onValueChange={setPiiSharing}
-          />
-        </View>
-        
-        <View style={styles.settingRow}>
-          <Text style={styles.settingLabel}>Anonymous incident logging</Text>
-          <Switch
-            value={anonymousLogging}
-            onValueChange={setAnonymousLogging}
-          />
+        <Text style={styles.sectionTitle}>{localizationService.t('language')}</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={selectedLanguage}
+            style={styles.picker}
+            onValueChange={(itemValue) => changeLanguage(itemValue)}
+          >
+            {languages.map((lang) => (
+              <Picker.Item key={lang.code} label={lang.name} value={lang.code} />
+            ))}
+          </Picker>
         </View>
       </View>
       
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Connectivity</Text>
+        <Text style={styles.sectionTitle}>{localizationService.t('notifications')}</Text>
         <View style={styles.settingRow}>
-          <Text style={styles.settingLabel}>Offline mode</Text>
+          <Text style={styles.settingLabel}>{localizationService.t('enable_notifications')}</Text>
           <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={notificationsEnabled ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleNotifications}
+            value={notificationsEnabled}
+          />
+        </View>
+      </View>
+      
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{localizationService.t('privacy')}</Text>
+        <View style={styles.settingRow}>
+          <Text style={styles.settingLabel}>{localizationService.t('offline_mode')}</Text>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={offlineMode ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleOfflineMode}
             value={offlineMode}
-            onValueChange={setOfflineMode}
           />
         </View>
-        
-        <View style={styles.infoBox}>
-          <Text style={styles.infoText}>
-            When offline mode is enabled, incidents will be stored locally and 
-            synced when connectivity resumes.
-          </Text>
-        </View>
-        
-        <TouchableOpacity 
-          style={styles.actionButton}
-          onPress={clearLocalIncidents}
-        >
-          <Text style={styles.actionButtonText}>Clear Local Incidents</Text>
+      </View>
+      
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{localizationService.t('emergency_contacts')}</Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>{localizationService.t('manage_contacts')}</Text>
         </TouchableOpacity>
       </View>
-      
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Language</Text>
-        <View style={styles.languageContainer}>
-          {languages.map((language) => (
-            <TouchableOpacity
-              key={language}
-              style={[
-                styles.languageButton,
-                selectedLanguage === language && styles.selectedLanguageButton,
-              ]}
-              onPress={() => setSelectedLanguage(language)}
-            >
-              <Text
-                style={[
-                  styles.languageButtonText,
-                  selectedLanguage === language && styles.selectedLanguageButtonText,
-                ]}
-              >
-                {language}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      
-      <TouchableOpacity style={styles.saveButton} onPress={saveSettings}>
-        <Text style={styles.saveButtonText}>Save Settings</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -147,70 +134,35 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: '#333',
   },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+  },
   settingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
   },
   settingLabel: {
     fontSize: 16,
-    color: '#333',
+    color: '#555',
   },
-  infoBox: {
-    backgroundColor: '#e3f2fd',
-    padding: 10,
-    borderRadius: 5,
-    marginVertical: 10,
-  },
-  infoText: {
-    fontSize: 14,
-    color: '#1976d2',
-  },
-  actionButton: {
-    backgroundColor: '#f44336',
+  button: {
+    backgroundColor: '#2196F3',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 10,
   },
-  actionButtonText: {
+  buttonText: {
     color: '#ffffff',
     fontWeight: 'bold',
     fontSize: 16,
-  },
-  languageContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  languageButton: {
-    backgroundColor: '#e0e0e0',
-    padding: 10,
-    margin: 5,
-    borderRadius: 20,
-  },
-  selectedLanguageButton: {
-    backgroundColor: '#2196F3',
-  },
-  languageButtonText: {
-    color: '#333',
-  },
-  selectedLanguageButtonText: {
-    color: '#ffffff',
-  },
-  saveButton: {
-    backgroundColor: '#4CAF50',
-    padding: 20,
-    margin: 20,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  saveButtonText: {
-    color: '#ffffff',
-    fontWeight: 'bold',
-    fontSize: 18,
   },
 });
 

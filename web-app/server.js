@@ -3,11 +3,113 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 8080; // Changed to 8080 to avoid conflicts
+const PORT = process.env.PORT || 9999; // Changed to 9999 to avoid conflicts
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// AI Anomaly Detection Integration
+const axios = require('axios');
+
+// IoT Integration
+const mqtt = require('mqtt');
+
+// Connect to MQTT broker (assuming it's running locally)
+const mqttClient = mqtt.connect('mqtt://localhost:1883');
+
+mqttClient.on('connect', () => {
+  console.log('Connected to MQTT broker');
+  // Subscribe to IoT alert topics
+  mqttClient.subscribe('iot/alerts/sos');
+  mqttClient.subscribe('iot/alerts/health');
+  mqttClient.subscribe('iot/alerts/battery');
+});
+
+mqttClient.on('message', (topic, message) => {
+  try {
+    const payload = JSON.parse(message.toString());
+    
+    // Handle different types of IoT alerts
+    if (topic === 'iot/alerts/sos') {
+      handleSOSAlert(payload);
+    } else if (topic === 'iot/alerts/health') {
+      handleHealthAlert(payload);
+    } else if (topic === 'iot/alerts/battery') {
+      handleBatteryAlert(payload);
+    }
+  } catch (error) {
+    console.error('Error processing MQTT message:', error);
+  }
+});
+
+// Handle SOS alerts from IoT devices
+function handleSOSAlert(alertData) {
+  console.log('IoT SOS Alert Received:', alertData);
+  
+  // Create a new incident in the system
+  const newIncident = {
+    id: `INC-2025-${Math.floor(100000 + Math.random() * 900000)}`,
+    timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+    location: `${alertData.location.latitude}, ${alertData.location.longitude}`,
+    type: 'IoT SOS Alert',
+    severity: 'Critical',
+    status: 'Active',
+    assignedTo: 'IoT_SYSTEM',
+    responseTime: '0 min',
+    slaStatus: 'Pending',
+    dispatchedUnits: [],
+    eta: 'Immediate',
+    priority: 'Critical',
+    reporter: `IoT Device ${alertData.device_id}`,
+    description: `SOS alert from wearable device. Heart Rate: ${alertData.health_metrics.heart_rate} BPM, Temperature: ${alertData.health_metrics.body_temperature}°C`
+  };
+  
+  mockIncidents.unshift(newIncident);
+  console.log('New incident created from IoT SOS alert');
+}
+
+// Handle health alerts from IoT devices
+function handleHealthAlert(alertData) {
+  console.log('IoT Health Alert Received:', alertData);
+  
+  // Create a new incident for abnormal health metrics
+  if (alertData.heart_rate > 120 || alertData.heart_rate < 50) {
+    const newIncident = {
+      id: `INC-2025-${Math.floor(100000 + Math.random() * 900000)}`,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+      location: 'Unknown (from wearable device)',
+      type: 'Health Anomaly Detected',
+      severity: 'High',
+      status: 'Active',
+      assignedTo: 'IoT_SYSTEM',
+      responseTime: '0 min',
+      slaStatus: 'Pending',
+      dispatchedUnits: [],
+      eta: 'Immediate',
+      priority: 'High',
+      reporter: `IoT Device ${alertData.device_id}`,
+      description: `Abnormal heart rate detected: ${alertData.heart_rate} BPM`
+    };
+    
+    mockIncidents.unshift(newIncident);
+    console.log('New incident created from IoT health alert');
+  }
+}
+
+// Handle battery alerts from IoT devices
+function handleBatteryAlert(alertData) {
+  console.log('IoT Battery Alert Received:', alertData);
+  
+  // Log the alert but don't create an incident unless it's critical
+  if (alertData.battery_level < 10) {
+    console.log(`CRITICAL: Device ${alertData.device_id} battery critically low: ${alertData.battery_level}%`);
+  }
+}
+
+// Blockchain integration
+// In a real implementation, this would connect to the deployed smart contract
+// For now, we'll simulate the blockchain functionality
 
 // Mock data - Enhanced with more India travel related locations
 const mockIncidents = [
@@ -339,6 +441,351 @@ app.use((err, req, res, next) => {
   res.status(500).json({
     success: false,
     message: 'Something went wrong!'
+  });
+});
+
+// AI Anomaly Detection Endpoints
+app.post('/api/ai/detect/location-dropoff', async (req, res) => {
+  try {
+    // In a real implementation, this would call the AI service
+    const { locationData } = req.body;
+    
+    // Simulate AI detection
+    const isAnomaly = Math.random() > 0.8; // 20% chance of anomaly for demo
+    const confidence = Math.random();
+    
+    // If anomaly detected, create an incident
+    if (isAnomaly) {
+      const newIncident = {
+        id: `INC-2025-${Math.floor(100000 + Math.random() * 900000)}`,
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        location: 'Unknown Location',
+        type: 'Location Drop-off Detected',
+        severity: confidence > 0.7 ? 'High' : 'Medium',
+        status: 'Active',
+        assignedTo: 'AI_SYSTEM',
+        responseTime: '0 min',
+        slaStatus: 'Pending',
+        dispatchedUnits: [],
+        eta: 'Immediate',
+        priority: confidence > 0.7 ? 'Critical' : 'High',
+        reporter: 'AI Anomaly Detection System',
+        description: 'Tourist location signal dropped unexpectedly'
+      };
+      mockIncidents.unshift(newIncident);
+    }
+    
+    res.json({
+      success: true,
+      data: {
+        anomaly: isAnomaly,
+        confidence: confidence,
+        timestamp: new Date().toISOString(),
+        type: 'location_dropoff'
+      }
+    });
+  } catch (error) {
+    console.error('AI detection error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to perform AI detection'
+    });
+  }
+});
+
+app.post('/api/ai/detect/inactivity', async (req, res) => {
+  try {
+    // In a real implementation, this would call the AI service
+    const { locationData, thresholdMinutes } = req.body;
+    
+    // Simulate AI detection
+    const isAnomaly = Math.random() > 0.85; // 15% chance of anomaly for demo
+    const confidence = Math.random();
+    
+    // If anomaly detected, create an incident
+    if (isAnomaly) {
+      const newIncident = {
+        id: `INC-2025-${Math.floor(100000 + Math.random() * 900000)}`,
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        location: 'Unknown Location',
+        type: 'Prolonged Inactivity Detected',
+        severity: confidence > 0.7 ? 'High' : 'Medium',
+        status: 'Active',
+        assignedTo: 'AI_SYSTEM',
+        responseTime: '0 min',
+        slaStatus: 'Pending',
+        dispatchedUnits: [],
+        eta: 'Immediate',
+        priority: confidence > 0.7 ? 'Critical' : 'High',
+        reporter: 'AI Anomaly Detection System',
+        description: `Tourist has been inactive for more than ${thresholdMinutes || 30} minutes`
+      };
+      mockIncidents.unshift(newIncident);
+    }
+    
+    res.json({
+      success: true,
+      data: {
+        anomaly: isAnomaly,
+        confidence: confidence,
+        timestamp: new Date().toISOString(),
+        type: 'prolonged_inactivity'
+      }
+    });
+  } catch (error) {
+    console.error('AI detection error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to perform AI detection'
+    });
+  }
+});
+
+app.post('/api/ai/detect/route-deviation', async (req, res) => {
+  try {
+    // In a real implementation, this would call the AI service
+    const { currentPath, plannedItinerary } = req.body;
+    
+    // Simulate AI detection
+    const isAnomaly = Math.random() > 0.9; // 10% chance of anomaly for demo
+    const confidence = Math.random();
+    
+    // If anomaly detected, create an incident
+    if (isAnomaly) {
+      const newIncident = {
+        id: `INC-2025-${Math.floor(100000 + Math.random() * 900000)}`,
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        location: 'Unknown Location',
+        type: 'Route Deviation Detected',
+        severity: confidence > 0.7 ? 'High' : 'Medium',
+        status: 'Active',
+        assignedTo: 'AI_SYSTEM',
+        responseTime: '0 min',
+        slaStatus: 'Pending',
+        dispatchedUnits: [],
+        eta: 'Immediate',
+        priority: confidence > 0.7 ? 'Critical' : 'High',
+        reporter: 'AI Anomaly Detection System',
+        description: 'Tourist has significantly deviated from planned itinerary'
+      };
+      mockIncidents.unshift(newIncident);
+    }
+    
+    res.json({
+      success: true,
+      data: {
+        anomaly: isAnomaly,
+        confidence: confidence,
+        timestamp: new Date().toISOString(),
+        type: 'route_deviation'
+      }
+    });
+  } catch (error) {
+    console.error('AI detection error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to perform AI detection'
+    });
+  }
+});
+
+// IoT Integration Endpoints
+app.post('/api/iot/devices', (req, res) => {
+  try {
+    const { deviceId, touristId } = req.body;
+    
+    // In a real implementation, this would register the device in the system
+    // For now, we'll just simulate it
+    
+    res.json({
+      success: true,
+      data: {
+        device_id: deviceId,
+        tourist_id: touristId,
+        status: 'registered',
+        message: 'Device registered successfully'
+      }
+    });
+  } catch (error) {
+    console.error('IoT device registration error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to register IoT device'
+    });
+  }
+});
+
+app.post('/api/iot/devices/:deviceId/sos', (req, res) => {
+  try {
+    const { deviceId } = req.params;
+    
+    // In a real implementation, this would trigger an SOS from the device
+    // For now, we'll just simulate it
+    
+    // Create an incident
+    const newIncident = {
+      id: `INC-2025-${Math.floor(100000 + Math.random() * 900000)}`,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+      location: 'Unknown (from wearable device)',
+      type: 'IoT SOS Alert',
+      severity: 'Critical',
+      status: 'Active',
+      assignedTo: 'IoT_SYSTEM',
+      responseTime: '0 min',
+      slaStatus: 'Pending',
+      dispatchedUnits: [],
+      eta: 'Immediate',
+      priority: 'Critical',
+      reporter: `IoT Device ${deviceId}`,
+      description: 'SOS alert triggered from wearable device'
+    };
+    
+    mockIncidents.unshift(newIncident);
+    
+    res.json({
+      success: true,
+      data: {
+        alert_id: `ALERT_${deviceId}_${Date.now()}`,
+        status: 'SOS alert triggered',
+        incident_id: newIncident.id
+      }
+    });
+  } catch (error) {
+    console.error('IoT SOS trigger error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to trigger SOS from IoT device'
+    });
+  }
+});
+
+app.get('/api/iot/devices/:deviceId/status', (req, res) => {
+  try {
+    const { deviceId } = req.params;
+    
+    // In a real implementation, this would fetch actual device status
+    // For now, we'll return simulated data
+    
+    const status = {
+      device_id: deviceId,
+      is_active: true,
+      battery_level: Math.floor(Math.random() * 100),
+      signal_strength: Math.floor(Math.random() * (-50 + 100) - 100), // -100 to -50
+      last_heartbeat: new Date().toISOString(),
+      location: {
+        latitude: 28.6139 + (Math.random() - 0.5) * 0.1,
+        longitude: 77.2090 + (Math.random() - 0.5) * 0.1,
+        accuracy: Math.floor(Math.random() * 10) + 3
+      }
+    };
+    
+    res.json({
+      success: true,
+      data: status
+    });
+  } catch (error) {
+    console.error('IoT device status error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get IoT device status'
+    });
+  }
+});
+
+// Blockchain integration endpoints
+app.post('/api/blockchain/identity', (req, res) => {
+  // In a real implementation, this would create an identity on the blockchain
+  const { touristData } = req.body;
+  
+  // Simulate blockchain transaction
+  const blockchainTx = {
+    transactionHash: '0x' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+    blockNumber: Math.floor(Math.random() * 1000000),
+    gasUsed: Math.floor(Math.random() * 50000),
+    status: 'success'
+  };
+  
+  res.json({
+    success: true,
+    data: {
+      touristId: touristData.touristId,
+      blockchainTx,
+      message: 'Identity created on blockchain successfully'
+    }
+  });
+});
+
+app.get('/api/blockchain/identity/:touristId', (req, res) => {
+  // In a real implementation, this would fetch identity from the blockchain
+  const { touristId } = req.params;
+  
+  // Simulate blockchain data
+  const blockchainData = {
+    touristId,
+    isVerified: true,
+    isActive: true,
+    issuer: 'Tourism Department',
+    issuedDate: '2025-09-01',
+    expiryDate: '2025-12-31',
+    createdAt: '2025-09-01T10:00:00Z',
+    updatedAt: '2025-09-01T10:00:00Z',
+    transactionHistory: [
+      {
+        transactionHash: '0x' + Math.random().toString(36).substring(2, 15),
+        blockNumber: Math.floor(Math.random() * 1000000),
+        eventType: 'IdentityCreated',
+        timestamp: '2025-09-01T10:00:00Z'
+      }
+    ]
+  };
+  
+  res.json({
+    success: true,
+    data: blockchainData
+  });
+});
+
+app.post('/api/blockchain/verify/:touristId', (req, res) => {
+  // In a real implementation, this would verify identity on the blockchain
+  const { touristId } = req.params;
+  
+  // Simulate blockchain verification
+  const blockchainTx = {
+    transactionHash: '0x' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+    blockNumber: Math.floor(Math.random() * 1000000),
+    gasUsed: Math.floor(Math.random() * 50000),
+    status: 'success'
+  };
+  
+  res.json({
+    success: true,
+    data: {
+      touristId,
+      blockchainTx,
+      message: 'Identity verified on blockchain successfully'
+    }
+  });
+});
+
+app.post('/api/blockchain/revoke/:touristId', (req, res) => {
+  // In a real implementation, this would revoke identity on the blockchain
+  const { touristId } = req.params;
+  
+  // Simulate blockchain revocation
+  const blockchainTx = {
+    transactionHash: '0x' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+    blockNumber: Math.floor(Math.random() * 1000000),
+    gasUsed: Math.floor(Math.random() * 50000),
+    status: 'success'
+  };
+  
+  res.json({
+    success: true,
+    data: {
+      touristId,
+      blockchainTx,
+      message: 'Identity revoked on blockchain successfully'
+    }
   });
 });
 

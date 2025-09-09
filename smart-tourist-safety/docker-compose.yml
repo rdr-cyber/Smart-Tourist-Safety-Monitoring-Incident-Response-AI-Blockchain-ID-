@@ -1,0 +1,184 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14
+    container_name: tourist_safety_postgres
+    environment:
+      POSTGRES_DB: tourist_safety
+      POSTGRES_USER: safety_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-safety_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - safety_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U safety_user -d tourist_safety"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Cache
+  redis:
+    image: redis:6-alpine
+    container_name: tourist_safety_redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - safety_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Ethereum Node
+  ethereum-node:
+    image: ethereum/client-go:latest
+    container_name: tourist_safety_ethereum
+    command: --http --http.addr 0.0.0.0 --http.port 8545 --http.api eth,net,web3,personal --syncmode light
+    ports:
+      - "8545:8545"
+      - "30303:30303"
+    volumes:
+      - ethereum_data:/root/.ethereum
+    networks:
+      - safety_network
+    restart: unless-stopped
+
+  # MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: tourist_safety_mqtt
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+    networks:
+      - safety_network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+
+  # Backend API
+  backend-api:
+    build:
+      context: ./web-app
+      dockerfile: Dockerfile
+    container_name: tourist_safety_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=tourist_safety
+      - DB_USER=safety_user
+      - DB_PASSWORD=${DB_PASSWORD:-safety_password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ETHEREUM_NODE=http://ethereum-node:8545
+      - MQTT_BROKER=mqtt://mosquitto:1883
+      - JWT_SECRET=${JWT_SECRET:-tourist_safety_jwt_secret}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:-tourist_safety_encryption_key}
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+      - ethereum-node
+      - mosquitto
+    networks:
+      - safety_network
+    restart: unless-stopped
+
+  # AI Engine
+  ai-engine:
+    build:
+      context: ./ai
+      dockerfile: Dockerfile
+    container_name: tourist_safety_ai
+    ports:
+      - "5001:5001"
+    environment:
+      - PYTHON_ENV=production
+    depends_on:
+      - backend-api
+    networks:
+      - safety_network
+    restart: unless-stopped
+
+  # IoT Service
+  iot-service:
+    build:
+      context: ./iot
+      dockerfile: Dockerfile
+    container_name: tourist_safety_iot
+    ports:
+      - "5002:5002"
+    environment:
+      - PYTHON_ENV=production
+    depends_on:
+      - mosquitto
+    networks:
+      - safety_network
+    restart: unless-stopped
+
+  # Web Frontend
+  web-frontend:
+    build:
+      context: ./web-app
+      dockerfile: Dockerfile.frontend
+    container_name: tourist_safety_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000/api
+      - REACT_APP_MQTT_BROKER=ws://localhost:9001
+    depends_on:
+      - backend-api
+    networks:
+      - safety_network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: tourist_safety_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs
+      - ./web-app/build:/var/www/web-app
+    depends_on:
+      - backend-api
+      - web-frontend
+    networks:
+      - safety_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  ethereum_data:
+  mosquitto_data:
+  mosquitto_log:
+
+networks:
+  safety_network:
+    driver: bridge

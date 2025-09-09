@@ -1,0 +1,23 @@
+{
+  "name": "tourist-identity-blockchain",
+  "version": "1.0.0",
+  "description": "Blockchain component for Smart Tourist Safety Monitoring & Incident Response System",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "truffle compile",
+    "migrate": "truffle migrate",
+    "deploy": "truffle migrate --reset"
+  },
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^2.1.15",
+    "dotenv": "^16.3.1",
+    "web3": "^4.1.2"
+  },
+  "devDependencies": {
+    "truffle": "^5.11.5"
+  }
+}
