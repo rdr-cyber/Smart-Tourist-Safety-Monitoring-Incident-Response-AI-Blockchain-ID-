@@ -314,6 +314,19 @@ This system is specifically designed for the Indian tourism sector with:
 The application is currently deployed at:
 https://smart-tourist-safety-monitoring-ej66gepmu-shelfwises-projects.vercel.app
 
+## GitHub Repository
+
+The source code is hosted on GitHub at:
+https://github.com/rdr-cyber/smart-tourist-safety-monitoring
+
+To set up the repository for the first time:
+1. Go to https://github.com/new
+2. Create a new public repository named `smart-tourist-safety-monitoring`
+3. Do not initialize with a README
+4. Run `git push -u origin master` to push the code
+
+For detailed setup instructions, see [GITHUB_SETUP_INSTRUCTIONS.md](GITHUB_SETUP_INSTRUCTIONS.md).
+
 ## Contributing
 
 1. Fork the repository
